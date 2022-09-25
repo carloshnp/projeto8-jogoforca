@@ -6,8 +6,11 @@ import forca4 from "./img/forca4.png"
 import forca5 from "./img/forca5.png"
 import forca6 from "./img/forca6.png"
 import styled from "styled-components"
+import palavras from "./palavras"
 
 const forca = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
+const alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+
 
 export default function App() {
 
@@ -26,11 +29,17 @@ export default function App() {
         )
     }
 
+    function Letras() {
+        return (
+            <></>
+        )
+    }
+
     return (
         <>
         <Jogo/>
-        {/* <Letras/>
-            <Chute/> */}
+        <Letras/>
+        {/*    <Chute/> */}
         </>
     )
 }
