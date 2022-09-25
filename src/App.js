@@ -14,6 +14,11 @@ const forca = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
 export default function App() {
 
     const contadorForca = 0;
+    
+    function selecionarPalavra() {
+      const palavra = palavras.[Math.floor(Math.random() * palavras.length)];
+      console.log(palavra)
+    }
 
     function Jogo() {
         return (
@@ -21,7 +26,7 @@ export default function App() {
                 <Forca>
                     <img src={forca[contadorForca]} alt="forca"/>
                 </Forca>
-                <EscolherPalavra>
+                <EscolherPalavra onClick="selecionarPalavra()">
                     Escolher Palavra
                 </EscolherPalavra>
             </TelaForca>
