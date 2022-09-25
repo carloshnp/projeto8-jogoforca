@@ -16,8 +16,8 @@ export default function App() {
     const contadorForca = 0;
     
     function selecionarPalavra() {
-      alert('teste!');
-      const palavra = palavras.[Math.floor(Math.random() * palavras.length)];
+      alert(Math.floor(2.34));
+      {/* const palavra = palavras.[Math.floor(Math.random() * palavras.length)];*/}
       alert(palavra);
     }
 
