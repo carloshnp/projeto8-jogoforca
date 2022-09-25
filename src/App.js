@@ -17,7 +17,7 @@ export default function App() {
     
     function selecionarPalavra() {
       alert(Math.floor(Math.random()*palavras.length));
-      const palavra = palavras.[Math.floor(Math.random()*palavras.length)];
+      const palavra = palavras[Math.floor(Math.random()*palavras.length)];
       alert(palavra);
     }
 
