@@ -68,6 +68,7 @@ const TelaForca = styled.div`
     width: 650px;
     position: relative;
     margin: 0 auto;
+    margin-top: 30px;
     display: flex;
 `
 
