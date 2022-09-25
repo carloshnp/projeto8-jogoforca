@@ -9,7 +9,6 @@ import styled from "styled-components"
 import palavras from "./palavras"
 
 const forca = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
-const alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 
 
 export default function App() {
@@ -29,17 +28,38 @@ export default function App() {
         )
     }
 
-    function Letras() {
+    function Letra(props) {
         return (
-            <></>
+            <Tecla>{props}</Tecla>
+        )
+    }
+
+    function Letras() {
+
+        const alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+
+        return (
+            <Teclado>
+                {alfabeto.map(Letra)}
+            </Teclado>
+        )
+    }
+
+    function Chute() {
+        return (
+            <JanelaChute>
+                <p>Já sei a palavra!</p>
+                <input></input>
+                <button>Chutar</button>
+            </JanelaChute>
         )
     }
 
     return (
         <>
-        <Jogo/>
-        <Letras/>
-        {/*    <Chute/> */}
+            <Jogo/>
+            <Letras/>
+            <Chute/>
         </>
     )
 }
@@ -68,3 +88,29 @@ const EscolherPalavra = styled.button`
     border: 0px;
     border-radius: 10px;
 `;
+
+const Teclado = styled.div`
+    width: 650px;
+    height: 100%;
+    margin: 30px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+`
+
+const Tecla = styled.button`
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+`
+
+const JanelaChute = styled.div`
+    width: 650px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+`
