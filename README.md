@@ -3,7 +3,7 @@
 ## Renderizar estado inicial
 
 - O estado inicial deve contar com as teclas e o input desabilitados
-- A forca deve ser renderizada com o botão ao lado (como se fosse uma sidebar)
+- A forca deve ser renderizada com o botão ao lado (como se fosse uma sidebar); estilizar forca
 
 ### Jogo
 
