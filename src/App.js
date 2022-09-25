@@ -26,7 +26,7 @@ export default function App() {
                 <Forca>
                     <img src={forca[contadorForca]} alt="forca"/>
                 </Forca>
-                <EscolherPalavra onClick="selecionarPalavra()">
+                <EscolherPalavra onClick={selecionarPalavra}>
                     Escolher Palavra
                 </EscolherPalavra>
             </TelaForca>
