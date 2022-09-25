@@ -16,7 +16,7 @@ export default function App() {
     const contadorForca = 0;
     
     function selecionarPalavra() {
-      prompt('teste?');
+      alert('teste!');
       const palavra = palavras.[Math.floor(Math.random() * palavras.length)];
       alert(palavra);
     }
