@@ -7,18 +7,59 @@ import forca5 from "./img/forca5.png"
 import forca6 from "./img/forca6.png"
 import styled from "styled-components"
 import palavras from "./palavras"
+import { useState } from "react"
 
 const forca = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
 
 
 export default function App() {
 
-    const contadorForca = 0;
-    
+    let contadorForca = 0
+    let letraSelecionada = ''
+    let checarPalavra = ''
+
+    const [palavra, setPalavra] = useState({
+        palavra: '',
+        estado: 'início'
+    });
+    console.log(palavra);
+
+    const [palavraTela, setPalavraTela] = useState('')
+    const [letrasSelecionadas, setLetrasSelecionadas] = useState([])
+
     function selecionarPalavra() {
-      alert(Math.floor(Math.random()*palavras.length));
-      const palavra = palavras[Math.floor(Math.random()*palavras.length)];
-      alert(palavra);
+        checarPalavra = ''
+        setPalavraTela('')
+        setLetrasSelecionadas([])
+        const novaPalavra = palavras[Math.floor(Math.random()*palavras.length)]
+        console.log(novaPalavra)
+        setPalavra({...palavra,
+            palavra: novaPalavra.split(''),
+            estado: 'jogando'
+        })
+        contadorForca = 0
+        letraSelecionada = ''
+
+        novaPalavra.split('').forEach(adivinharPalavra)
+    }
+
+    function adivinharPalavra(letra) {
+        checarPalavra = checarPalavra + (letrasSelecionadas.includes(letra) ? letra : '_')
+        setPalavraTela(...palavraTela, checarPalavra)
+        console.log(palavraTela)
+        console.log(checarPalavra)
+    }
+
+    function selecionarLetra(props) {
+        letraSelecionada = props.target.textContent
+        letrasSelecionadas.push(letraSelecionada)
+        setLetrasSelecionadas(letrasSelecionadas)
+        palavra.palavra.forEach(adivinharPalavra)
+        setPalavraTela(checarPalavra)
+
+        const letraCerta = palavra.palavra.includes(letraSelecionada)
+        console.log(letraCerta)
+        console.log(letrasSelecionadas)
     }
 
     function Jogo() {
@@ -27,16 +68,21 @@ export default function App() {
                 <Forca>
                     <img src={forca[contadorForca]} alt="forca"/>
                 </Forca>
-                <EscolherPalavra onClick={selecionarPalavra}>
-                    Escolher Palavra
-                </EscolherPalavra>
+                <Palavra>
+                    <EscolherPalavra onClick={selecionarPalavra}>
+                        Escolher Palavra
+                    </EscolherPalavra>
+                    <PalavraRenderizada>
+                        {palavraTela}
+                    </PalavraRenderizada>
+                </Palavra>
             </TelaForca>
         )
     }
 
     function Letra(props) {
         return (
-            <Tecla>{props}</Tecla>
+            <Tecla onClick={selecionarLetra}>{props}</Tecla>
         )
     }
 
@@ -120,4 +166,15 @@ const JanelaChute = styled.div`
     margin: 0 auto;
     display: flex;
     justify-content: space-around;
+`
+
+const Palavra = styled.div`
+`
+
+const PalavraRenderizada = styled.div`
+    font-size: 24px;
+    letter-spacing: 5px;
+    position: absolute;
+    bottom: 0;
+    right: 30px;
 `
