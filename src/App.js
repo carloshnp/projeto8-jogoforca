@@ -11,35 +11,26 @@ import { useState } from "react"
 
 
 
-export default function App() {
+function App() {
 
     const forca = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
-
+    const alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
     const [contadorForca, setContadorForca] = useState(0)
-    let letraSelecionada = ''
-    let checarPalavra = ''
-
+    const [chute, setChute] = useState('')
+    const [palavraTela, setPalavraTela] = useState('')
+    const [letrasSelecionadas, setLetrasSelecionadas] = useState([])
+    const [disabled, setDisabled] = useState(true)
     const [palavra, setPalavra] = useState({
         palavra: '',
         estado: 'padrão',
         cor: 'preto'
     });
-    console.log(palavra);
 
-    const [palavraTela, setPalavraTela] = useState('')
-    const [letrasSelecionadas, setLetrasSelecionadas] = useState([])
+    let letraSelecionada = ''
+    let checarPalavra = ''
 
-    const [disabled, setDisabled] = useState(true)
-
-    function novoJogo() {
-        setPalavraTela('')
-        setLetrasSelecionadas([])
-        setContadorForca(0)
-        letraSelecionada = ''
-        checarPalavra = ''
-
-        selecionarPalavra()
-    }
+    console.log(palavra)
+    console.log(chute)
 
     function selecionarPalavra() {
         setDisabled(false)
@@ -88,6 +79,22 @@ export default function App() {
         jogoFinalizado()
     }
 
+    function chutarPalavra() {
+        const chuteNormalizado = chute.normalize('NFD').replace(/[\u0300-\u036f]/g,"")
+        const palavraNormalizada = palavra.palavraOriginal.normalize('NFD').replace(/[\u0300-\u036f]/g,"")
+        console.log(palavraNormalizada)
+        if (chuteNormalizado === palavraNormalizada) {
+            setPalavra({...palavra, estado: 'initial', cor: 'verde'})
+            setPalavraTela(palavra.palavraOriginal)
+        }
+        else {
+            setPalavra({...palavra, estado: 'initial', cor: 'vermelho'})
+            setPalavraTela(palavra.palavraOriginal)
+            setContadorForca(forca.length-1)
+        }
+        setDisabled(true)
+    }
+
     function jogoFinalizado() {
         console.log(checarPalavra)
         console.log(contadorForca)
@@ -103,14 +110,20 @@ export default function App() {
         }
     }
 
-    function Jogo() {
+    function Letra(props) {
         return (
+            <Tecla onClick={selecionarLetra} disabled={disabled || letrasSelecionadas.includes(props)}>{props}</Tecla>
+        )
+    }
+
+    return (
+        <>
             <TelaForca>
                 <Forca>
                     <img src={forca[contadorForca]} alt="forca"/>
                 </Forca>
                 <Palavra>
-                    <EscolherPalavra onClick={novoJogo}>
+                    <EscolherPalavra onClick={selecionarPalavra}>
                         Escolher Palavra
                     </EscolherPalavra>
                     <PalavraRenderizada cor={palavra.cor}>
@@ -118,44 +131,21 @@ export default function App() {
                     </PalavraRenderizada>
                 </Palavra>
             </TelaForca>
-        )
-    }
 
-    function Letra(props) {
-        return (
-            <Tecla onClick={selecionarLetra} disabled={disabled || letrasSelecionadas.includes(props)}>{props}</Tecla>
-        )
-    }
-
-    function Letras() {
-
-        const alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-
-        return (
             <Teclado>
                 {alfabeto.map(Letra)}
             </Teclado>
-        )
-    }
 
-    function Chute() {
-        return (
             <JanelaChute>
                 <p>Já sei a palavra!</p>
-                <input disabled={disabled}></input>
-                <button>Chutar</button>
+                <input onChange={event => setChute(event.target.value)} placeholder="Faça um chute!" value={chute} disabled={disabled}></input>
+                <button onClick={chutarPalavra} disabled={disabled}>Chutar</button>
             </JanelaChute>
-        )
-    }
-
-    return (
-        <>
-            <Jogo/>
-            <Letras/>
-            <Chute/>
         </>
     )
 }
+
+export default App
 
 const TelaForca = styled.div`
     width: 650px;
@@ -236,9 +226,9 @@ const PalavraRenderizada = styled.div`
     font-size: 24px;
     letter-spacing: 5px;
     color: ${props => {
-        if (props.cor == 'verde') {
+        if (props.cor === 'verde') {
             return '#27ae60;'}
-        else if (props.cor == 'vermelho') {
+        else if (props.cor === 'vermelho') {
             return '#ff0e05;'}
         else {
             return 'initial;'};
