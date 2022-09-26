@@ -29,14 +29,10 @@ function App() {
     let letraSelecionada = ''
     let checarPalavra = ''
 
-    console.log(palavra)
-    console.log(chute)
-
     function selecionarPalavra() {
         setDisabled(false)
         checarPalavra = ''
         const novaPalavra = palavras[Math.floor(Math.random()*palavras.length)]
-        console.log(novaPalavra)
         setPalavra({...palavra,
             palavra: novaPalavra.split(''),
             palavraOriginal: novaPalavra,
@@ -49,13 +45,9 @@ function App() {
     function adivinharPalavra(letra) {
         checarPalavra = checarPalavra + (letrasSelecionadas.includes(letra) ? letra : '_')
         setPalavraTela(...palavraTela, checarPalavra)
-        console.log(palavraTela)
-        console.log(checarPalavra)
     }
 
     function selecionarLetra(props) {
-
-        console.log(props.target)
 
         letraSelecionada = props.target.textContent
         letrasSelecionadas.push(letraSelecionada)
@@ -72,9 +64,6 @@ function App() {
         }
 
         setPalavraTela(checarPalavra)
-        console.log(letraCerta)
-        console.log(letrasSelecionadas)
-        console.log(contadorForca)
 
         jogoFinalizado()
     }
@@ -82,7 +71,6 @@ function App() {
     function chutarPalavra() {
         const chuteNormalizado = chute.normalize('NFD').replace(/[\u0300-\u036f]/g,"")
         const palavraNormalizada = palavra.palavraOriginal.normalize('NFD').replace(/[\u0300-\u036f]/g,"")
-        console.log(palavraNormalizada)
         if (chuteNormalizado === palavraNormalizada) {
             setPalavra({...palavra, estado: 'initial', cor: 'verde'})
             setPalavraTela(palavra.palavraOriginal)
@@ -96,8 +84,6 @@ function App() {
     }
 
     function jogoFinalizado() {
-        console.log(checarPalavra)
-        console.log(contadorForca)
         if (contadorForca === (forca.length-2)) {
             setPalavra({...palavra, estado: 'initial', cor: 'vermelho'})
             setPalavraTela(palavra.palavraOriginal)
