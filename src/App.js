@@ -9,36 +9,47 @@ import styled from "styled-components"
 import palavras from "./palavras"
 import { useState } from "react"
 
-const forca = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
 
 
 export default function App() {
 
-    let contadorForca = 0
+    const forca = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
+
+    const [contadorForca, setContadorForca] = useState(0)
     let letraSelecionada = ''
     let checarPalavra = ''
 
     const [palavra, setPalavra] = useState({
         palavra: '',
-        estado: 'início'
+        estado: 'padrão'
     });
     console.log(palavra);
 
     const [palavraTela, setPalavraTela] = useState('')
     const [letrasSelecionadas, setLetrasSelecionadas] = useState([])
 
-    function selecionarPalavra() {
-        checarPalavra = ''
+    const [disabled, setDisabled] = useState(true)
+
+    function novoJogo() {
         setPalavraTela('')
         setLetrasSelecionadas([])
+        setContadorForca(0)
+        letraSelecionada = ''
+        checarPalavra = ''
+
+        selecionarPalavra()
+    }
+
+    function selecionarPalavra() {
+        setDisabled(false)
+        checarPalavra = ''
         const novaPalavra = palavras[Math.floor(Math.random()*palavras.length)]
         console.log(novaPalavra)
         setPalavra({...palavra,
             palavra: novaPalavra.split(''),
+            palavraOriginal: novaPalavra,
             estado: 'jogando'
         })
-        contadorForca = 0
-        letraSelecionada = ''
 
         novaPalavra.split('').forEach(adivinharPalavra)
     }
@@ -51,15 +62,36 @@ export default function App() {
     }
 
     function selecionarLetra(props) {
+
+        console.log(props.target)
+
         letraSelecionada = props.target.textContent
         letrasSelecionadas.push(letraSelecionada)
         setLetrasSelecionadas(letrasSelecionadas)
-        palavra.palavra.forEach(adivinharPalavra)
-        setPalavraTela(checarPalavra)
+        const palavraNormalizada = palavra.palavraOriginal.normalize('NFD').replace(/[\u0300-\u036f]/g,"").split('')
+        palavraNormalizada.forEach((letra, index) => {
+            checarPalavra = checarPalavra + (letrasSelecionadas.includes(letra) ? palavra.palavra[index] : '_')
+            setPalavraTela(...palavraTela, checarPalavra)
+        })
 
-        const letraCerta = palavra.palavra.includes(letraSelecionada)
+        const letraCerta = palavraNormalizada.includes(letraSelecionada)
+        if (!letraCerta) {
+            setContadorForca(contadorForca+1)
+        }
+
+        setPalavraTela(checarPalavra)
         console.log(letraCerta)
         console.log(letrasSelecionadas)
+        console.log(contadorForca)
+
+        jogoFinalizado()
+    }
+
+    function jogoFinalizado() {
+        if (contadorForca == forca.length -1) {
+            setPalavraTela(palavraOriginal)
+            alert('Você perdeu!')
+        }
     }
 
     function Jogo() {
@@ -69,7 +101,7 @@ export default function App() {
                     <img src={forca[contadorForca]} alt="forca"/>
                 </Forca>
                 <Palavra>
-                    <EscolherPalavra onClick={selecionarPalavra}>
+                    <EscolherPalavra onClick={novoJogo}>
                         Escolher Palavra
                     </EscolherPalavra>
                     <PalavraRenderizada>
@@ -82,7 +114,7 @@ export default function App() {
 
     function Letra(props) {
         return (
-            <Tecla onClick={selecionarLetra}>{props}</Tecla>
+            <Tecla onClick={selecionarLetra} disabled={disabled || letrasSelecionadas.includes(props)}>{props}</Tecla>
         )
     }
 
@@ -101,7 +133,7 @@ export default function App() {
         return (
             <JanelaChute>
                 <p>Já sei a palavra!</p>
-                <input></input>
+                <input disabled={disabled}></input>
                 <button>Chutar</button>
             </JanelaChute>
         )
@@ -157,7 +189,9 @@ const Tecla = styled.button`
     height: 40px;
     margin-left: 10px;
     margin-bottom: 10px;
-    border: 1px solid #CCCCCC;
+    background-color: ${props => props.disabled ? '#9faab5;' : '#e1ecf4;'};
+    color: ${props => props.disabled ? '#79818a;' : '#3979a5;'};
+    border: 1px solid #c9dbe9;
     border-radius: 5px;
 `
 
@@ -166,6 +200,24 @@ const JanelaChute = styled.div`
     margin: 0 auto;
     display: flex;
     justify-content: space-around;
+    align-items: center;
+
+    input {
+        width: 400px;
+        height: 30px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+    }
+
+    button {
+        width: 80px;
+        height: 35px;
+        font-size: 16px;
+        color: #3979a5;
+        background-color: #e1ecf4;
+        border: 1px solid #c9dbe9;
+        border-radius: 5px;
+    }
 `
 
 const Palavra = styled.div`
