@@ -16,7 +16,6 @@ export default function App() {
     const forca = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
 
     const [contadorForca, setContadorForca] = useState(0)
-    let letraSelecionada = ''
     let checarPalavra = ''
 
     const [palavra, setPalavra] = useState({
@@ -35,7 +34,6 @@ export default function App() {
         setPalavraTela('')
         setLetrasSelecionadas([])
         setContadorForca(0)
-        letraSelecionada = ''
         checarPalavra = ''
 
         selecionarPalavra()
@@ -66,9 +64,9 @@ export default function App() {
 
         console.log(props.target)
 
-        letraSelecionada = props.target.textContent
-        letrasSelecionadas.push(letraSelecionada)
-        setLetrasSelecionadas(letrasSelecionadas)
+        const letraSelecionada = props.target.textContent
+        const arrayLetrasSelecionadas = [...letrasSelecionadas, letraSelecionada]
+        setLetrasSelecionadas(arrayLetrasSelecionadas)
         const palavraNormalizada = palavra.palavraOriginal.normalize('NFD').replace(/[\u0300-\u036f]/g,"").split('')
         palavraNormalizada.forEach((letra, index) => {
             checarPalavra = checarPalavra + (letrasSelecionadas.includes(letra) ? palavra.palavra[index] : '_')
@@ -87,6 +85,9 @@ export default function App() {
 
         jogoFinalizado()
     }
+
+    // function chutarPalavra() {
+    // }
 
     function jogoFinalizado() {
         console.log(checarPalavra)
@@ -122,8 +123,13 @@ export default function App() {
     }
 
     function Letra(props) {
+        const [letra, setLetra] = useState(false)
+        console.log(letra)
         return (
-            <Tecla onClick={selecionarLetra} disabled={disabled || letrasSelecionadas.includes(props)}>{props}</Tecla>
+            <Tecla onClick={e => {
+                setLetra(true)
+                selecionarLetra(e)
+            }} disabled={letra}>{props.caracter}</Tecla>
         )
     }
 
@@ -133,7 +139,7 @@ export default function App() {
 
         return (
             <Teclado>
-                {alfabeto.map(Letra)}
+                {alfabeto.map(e => <Letra caracter={e}/>)}
             </Teclado>
         )
     }
@@ -236,9 +242,9 @@ const PalavraRenderizada = styled.div`
     font-size: 24px;
     letter-spacing: 5px;
     color: ${props => {
-        if (props.cor == 'verde') {
+        if (props.cor === 'verde') {
             return '#27ae60;'}
-        else if (props.cor == 'vermelho') {
+        else if (props.cor === 'vermelho') {
             return '#ff0e05;'}
         else {
             return 'initial;'};
