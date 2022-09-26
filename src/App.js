@@ -21,7 +21,8 @@ export default function App() {
 
     const [palavra, setPalavra] = useState({
         palavra: '',
-        estado: 'padrão'
+        estado: 'padrão',
+        cor: 'preto'
     });
     console.log(palavra);
 
@@ -88,9 +89,17 @@ export default function App() {
     }
 
     function jogoFinalizado() {
-        if (contadorForca == forca.length -1) {
-            setPalavraTela(palavraOriginal)
-            alert('Você perdeu!')
+        console.log(checarPalavra)
+        console.log(contadorForca)
+        if (contadorForca === (forca.length-2)) {
+            setPalavra({...palavra, estado: 'initial', cor: 'vermelho'})
+            setPalavraTela(palavra.palavraOriginal)
+            setDisabled(true)
+        }
+        if (!checarPalavra.includes('_')) {
+            setPalavra({...palavra, estado: 'initial', cor: 'verde'})
+            setPalavraTela(palavra.palavraOriginal)
+            setDisabled(true)
         }
     }
 
@@ -104,7 +113,7 @@ export default function App() {
                     <EscolherPalavra onClick={novoJogo}>
                         Escolher Palavra
                     </EscolherPalavra>
-                    <PalavraRenderizada>
+                    <PalavraRenderizada cor={palavra.cor}>
                         {palavraTela}
                     </PalavraRenderizada>
                 </Palavra>
@@ -226,6 +235,14 @@ const Palavra = styled.div`
 const PalavraRenderizada = styled.div`
     font-size: 24px;
     letter-spacing: 5px;
+    color: ${props => {
+        if (props.cor == 'verde') {
+            return '#27ae60;'}
+        else if (props.cor == 'vermelho') {
+            return '#ff0e05;'}
+        else {
+            return 'initial;'};
+    }};
     position: absolute;
     bottom: 0;
     right: 30px;
